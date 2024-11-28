@@ -24,7 +24,11 @@ const wbotMonitor = async (
         await whatsapp.update({ status: newState });
       } catch (err) {
         Sentry.captureException(err);
-        logger.error(err);
+        if (err instanceof Error) {
+          logger.error(err.message);
+        } else {
+          logger.error('An unknown error occurred');
+        }
       }
 
       io.emit("whatsappSession", {
@@ -43,7 +47,11 @@ const wbotMonitor = async (
         await whatsapp.update({ battery, plugged });
       } catch (err) {
         Sentry.captureException(err);
-        logger.error(err);
+        if (err instanceof Error) {
+          logger.error(err.message);
+        } else {
+          logger.error('An unknown error occurred');
+        }
       }
 
       io.emit("whatsappSession", {
@@ -58,7 +66,11 @@ const wbotMonitor = async (
         await whatsapp.update({ status: "OPENING", session: "" });
       } catch (err) {
         Sentry.captureException(err);
-        logger.error(err);
+        if (err instanceof Error) {
+          logger.error(err.message);
+        } else {
+          logger.error('An unknown error occurred');
+        }
       }
 
       io.emit("whatsappSession", {
@@ -70,7 +82,11 @@ const wbotMonitor = async (
     });
   } catch (err) {
     Sentry.captureException(err);
-    logger.error(err);
+    if (err instanceof Error) {
+      logger.error(err.message);
+    } else {
+      logger.error('An unknown error occurred');
+    }
   }
 };
 

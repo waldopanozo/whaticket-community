@@ -42,7 +42,10 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
   try {
     await QuickAnswerSchema.validate(newQuickAnswer);
   } catch (err) {
-    throw new AppError(err.message);
+    if (err instanceof Yup.ValidationError) {
+      throw new AppError(err.message);
+    }
+    throw new AppError("An unexpected error occurred");
   }
 
   const quickAnswer = await CreateQuickAnswerService({
@@ -80,7 +83,11 @@ export const update = async (
   try {
     await schema.validate(quickAnswerData);
   } catch (err) {
-    throw new AppError(err.message);
+    if (err instanceof Error) {
+      throw new AppError(err.message);
+    } else {
+      throw new AppError("An unexpected error occurred");
+    }
   }
 
   const { quickAnswerId } = req.params;

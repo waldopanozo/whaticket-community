@@ -70,13 +70,17 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
 
   try {
     await schema.validate(newContact);
-  } catch (err) {
-    throw new AppError(err.message);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      throw new AppError(err.message);
+    } else {
+      throw new AppError("An unknown error occurred");
+    }
   }
 
   await CheckIsValidContact(newContact.number);
   const validNumber : any = await CheckContactNumber(newContact.number)
-  
+
   const profilePicUrl = await GetProfilePicUrl(validNumber);
 
   let name = newContact.name
@@ -125,8 +129,12 @@ export const update = async (
 
   try {
     await schema.validate(contactData);
-  } catch (err) {
-    throw new AppError(err.message);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      throw new AppError(err.message);
+    } else {
+      throw new AppError("An unknown error occurred");
+    }
   }
 
   await CheckIsValidContact(contactData.number);
