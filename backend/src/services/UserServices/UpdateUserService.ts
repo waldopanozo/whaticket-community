@@ -43,7 +43,10 @@ const UpdateUserService = async ({
   try {
     await schema.validate({ email, password, profile, name });
   } catch (err) {
-    throw new AppError(err.message);
+    if (err instanceof Error) {
+      throw new AppError(err.message);
+    }
+    throw new AppError("An unknown error occurred");
   }
 
   await user.update({

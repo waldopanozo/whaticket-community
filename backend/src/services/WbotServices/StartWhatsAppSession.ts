@@ -21,6 +21,10 @@ export const StartWhatsAppSession = async (
     wbotMessageListener(wbot);
     wbotMonitor(wbot, whatsapp);
   } catch (err) {
-    logger.error(err);
+    if (err instanceof Error) {
+      logger.error(err);
+    } else {
+      logger.error('An unknown error occurred');
+    }
   }
 };

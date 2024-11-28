@@ -107,7 +107,7 @@ const verifyMediaMessage = async (
     );
   } catch (err) {
     Sentry.captureException(err);
-    logger.error(err);
+    logger.error(err instanceof Error ? err.message : String(err));
   }
 
   const messageData = {

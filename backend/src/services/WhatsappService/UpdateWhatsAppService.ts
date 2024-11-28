@@ -49,7 +49,11 @@ const UpdateWhatsAppService = async ({
   try {
     await schema.validate({ name, status, isDefault });
   } catch (err) {
-    throw new AppError(err.message);
+    if (err instanceof Error) {
+      throw new AppError(err.message);
+    } else {
+      throw new AppError("An unknown error occurred");
+    }
   }
 
   if (queueIds.length > 1 && !greetingMessage) {

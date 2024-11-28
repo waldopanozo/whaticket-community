@@ -60,7 +60,11 @@ const UpdateQueueService = async (
   try {
     await queueSchema.validate({ color, name });
   } catch (err) {
-    throw new AppError(err.message);
+    if (err instanceof Error) {
+      throw new AppError(err.message);
+    } else {
+      throw new AppError("An unknown error occurred");
+    }
   }
 
   const queue = await ShowQueueService(queueId);

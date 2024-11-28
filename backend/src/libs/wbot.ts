@@ -127,8 +127,11 @@ export const initWbot = async (whatsapp: Whatsapp): Promise<Session> => {
 
         resolve(wbot);
       });
-    } catch (err) {
-      logger.error(err);
+    } catch (err:unknown) {
+      if (err instanceof AppError) {
+
+        logger.error(err);
+      }
     }
   });
 };
@@ -150,6 +153,8 @@ export const removeWbot = (whatsappId: number): void => {
       sessions.splice(sessionIndex, 1);
     }
   } catch (err) {
-    logger.error(err);
+    if (err instanceof AppError) {
+      logger.error(err);
+    }
   }
 };

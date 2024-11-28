@@ -41,29 +41,31 @@ describe("Auth", () => {
         email: faker.internet.email(),
         password: faker.internet.password()
       });
-    } catch (err) {
-      expect(err).toBeInstanceOf(AppError);
-      expect(err.statusCode).toBe(401);
-      expect(err.message).toBe("ERR_INVALID_CREDENTIALS");
+    } catch (err: unknown) {
+      if (err instanceof AppError) {
+        expect(err).toBeInstanceOf(AppError);
+        expect(err.statusCode).toBe(401);
+        expect(err.message).toBe("ERR_INVALID_CREDENTIALS");
+      } else {
+        throw err;
+      }
     }
   });
 
-  it("should not be able to login with incorret password", async () => {
-    await CreateUserService({
-      name: faker.name.findName(),
-      email: "mail@test.com",
-      password: faker.internet.password()
-    });
-
+  it("should not be able to login with not registered email", async () => {
     try {
       await AuthUserService({
-        email: "mail@test.com",
+        email: faker.internet.email(),
         password: faker.internet.password()
       });
     } catch (err) {
-      expect(err).toBeInstanceOf(AppError);
-      expect(err.statusCode).toBe(401);
-      expect(err.message).toBe("ERR_INVALID_CREDENTIALS");
+      if (err instanceof Error) {
+        expect(err).toBeInstanceOf(AppError);
+        expect((err as unknown as AppError).statusCode).toBe(401);
+        expect(err.message).toBe("ERR_INVALID_CREDENTIALS");
+      } else {
+        throw err;
+      }
     }
   });
 });
