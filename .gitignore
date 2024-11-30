@@ -3,3 +3,8 @@ ssl/
 .env
 .wwebjs_auth
 .idea
+
+.history
+.vscode
+
+node_modules
